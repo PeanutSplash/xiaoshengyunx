@@ -1,13 +1,47 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view/>
+    <!-- 非登录页面 -->
+    <div v-if="!(path === '/login' || path === '/reg')" class="app">
+      <leftNavigationBar></leftNavigationBar>
+      <div style="display: flex;flex-direction: column;">
+        <router-view class="router"></router-view>
+      </div>
+
+    </div>
+    <!-- 登录页面 -->
+    <div v-if="(path === '/login' || path === '/reg')">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
+<script>
+import leftNavigationBar from '@/components/leftNavigationBar'
+import topFileBar from '@/components/topFileBar'
 
+export default {
+  name: 'App',
+  data() {
+    return {
+      path: ''
+    }
+  },
+  components: {
+    leftNavigationBar,
+    topFileBar
+  },
+  // 判断路由
+  mounted() {
+    this.path = this.$route.path;
+    // console.log(this.$route.path)
+  },
+  watch: {
+    $route(to, from) {
+      this.path = to.path
+    }
+  }
+
+}
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -17,16 +51,21 @@
   color: #2c3e50;
 }
 
-nav {
-  padding: 30px;
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
 }
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
+.app {
+  display: flex;
+  flex-direction: row;
 }
 
-nav a.router-link-exact-active {
-  color: #42b983;
+.router {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
